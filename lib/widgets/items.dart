@@ -1,11 +1,32 @@
+import 'package:ecommerce/models/Product.dart';
+import 'package:ecommerce/widgets/ItemCard.dart';
 import 'package:flutter/material.dart';
 
-class items extends StatelessWidget {
+class Items extends StatefulWidget {
+  @override
+  _Items createState() => _Items();
+}
+
+class _Items extends State<Items> {
+  late Future<List<Product>> products;
+
+  @override
+  void initState() {
+    super.initState();
+    _reloadData();
+  }
+
+  _reloadData() {
+    setState(() {
+      products = getProducts();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,105 +50,41 @@ class items extends StatelessWidget {
             ],
           ),
         ),
-        GridView.count(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          crossAxisCount: 2,
-          childAspectRatio: 0.8,
-          shrinkWrap: true,
-          children: [
-            for (int i = 1; i < 11; i++)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                    )
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, "itemPage");
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: Image.asset('lib/images/products/$i.png'),
-                        height: 110,
-                        width: 110,
+        FutureBuilder(
+          future: products,
+          builder: (context, snapshot) {
+            if(snapshot.hasData) {
+              return GridView.count(
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 2,
+                childAspectRatio: 0.8,
+                shrinkWrap: true,
+                children: [
+                  for (int i=0; i<snapshot.data!.length; i++)
+                    ItemCard(
+                      product: Product(
+                        id: snapshot.data![i].id,
+                        name: snapshot.data![i].name,
+                        category: snapshot.data![i].category,
+                        price: snapshot.data![i].price,
+                        image: snapshot.data![i].image,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Item title",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Food 2KG",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "\$20",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.pink,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Icon(
-                                Icons.add_shopping_cart,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-          ],
+                ]
+              );
+            }
+            else if(snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            else {
+              return const CircularProgressIndicator();
+            }
+          },
         ),
       ],
     );
   }
+
 }

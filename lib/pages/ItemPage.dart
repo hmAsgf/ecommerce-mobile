@@ -1,8 +1,16 @@
+import 'package:ecommerce/models/Product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/widgets/BottomBar.dart';
 
 class ItemPage extends StatelessWidget {
+  final Product product;
+  int quantity = 0;
+
+  ItemPage({Key? key, 
+    required this.product
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,21 +20,21 @@ class ItemPage extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 height: 300,
                 width: double.infinity,
                 alignment: Alignment.topLeft,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    image: AssetImage("lib/images/esteh.jpeg"),
+                    image: NetworkImage('http://127.0.0.1:8000/storage/products/${product.image}'),
                   ),
                 ),
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.arrow_back,
                     size: 30,
                     color: Colors.black,
@@ -35,9 +43,9 @@ class ItemPage extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.5,
-                margin: EdgeInsets.only(top: 0),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
+                margin: const EdgeInsets.only(top: 0),
+                padding: const EdgeInsets.all(15),
+                decoration: const BoxDecoration(
                   color: Colors.pink,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -47,13 +55,13 @@ class ItemPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      padding: const EdgeInsets.only(top: 10, bottom: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Food Title",
-                            style: TextStyle(
+                            product.name,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -62,20 +70,20 @@ class ItemPage extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.all(3),
+                                padding: const EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.minus,
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                margin: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "01",
-                                  style: TextStyle(
+                                  quantity.toString(),
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -83,12 +91,12 @@ class ItemPage extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(3),
+                                padding: const EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.plus,
                                 ),
                               ),
@@ -97,7 +105,7 @@ class ItemPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Row(
+                    const Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Icon(
@@ -114,7 +122,7 @@ class ItemPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +149,7 @@ class ItemPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: [
