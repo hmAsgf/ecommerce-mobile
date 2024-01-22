@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {
+  final int price;
+
+  BottomBar({Key? key, required this.price}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -9,7 +13,7 @@ class BottomBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "\$120",
+              "Rp ${price}",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,

@@ -5,7 +5,7 @@ import 'package:ecommerce/pages/login_page.dart';
 import 'package:ecommerce/widgets/BottomCartSheet.dart';
 import 'package:ecommerce/widgets/categories.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:ecommerce/widgets/items.dart';
+import 'package:ecommerce/widgets/Items.dart';
 import 'package:ecommerce/widgets/popular.dart';
 import 'package:ecommerce/components/navbar.dart';
 
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     categories(),
                     popular(),
-                    items(),
+                    Items(),
                   ],
                 ),
               )

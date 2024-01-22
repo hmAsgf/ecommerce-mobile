@@ -41,7 +41,7 @@ Future<List<Product>> getProducts() async
 
   if(response.statusCode == 200) {
     var jsonResp = json.decode(response.body);
-    return productFromJson(jsonResp.products);
+    return productFromJson(jsonResp['products']);
   }
   else {
     throw Exception("Failed load, status: ${response.statusCode}");
