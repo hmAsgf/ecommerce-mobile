@@ -3,13 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/widgets/BottomBar.dart';
 
-class ItemPage extends StatelessWidget {
+class ItemPage extends StatefulWidget {
   final Product product;
-  int quantity = 0;
 
-  ItemPage({Key? key, 
+  const ItemPage({Key? key, 
     required this.product
   }) : super(key: key);
+
+  @override
+  State<ItemPage> createState() => _ItemPageState();
+}
+
+class _ItemPageState extends State<ItemPage> {
+  int quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class ItemPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    image: NetworkImage('http://127.0.0.1:8000/storage/products/${product.image}'),
+                    image: NetworkImage('http://127.0.0.1:8000/storage/products/${widget.product.image}'),
                   ),
                 ),
                 child: InkWell(
@@ -60,7 +66,7 @@ class ItemPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            product.name,
+                            widget.product.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -185,7 +191,7 @@ class ItemPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(),
+      bottomNavigationBar: BottomBar(price: widget.product.price),
     );
   }
 }
