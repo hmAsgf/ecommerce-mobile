@@ -1,6 +1,6 @@
+import 'package:ecommerce/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/pages/SplashScreen.dart';
-import 'package:ecommerce/views/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         "/": (context) => SplashScreen(),
-        "homePage": (context) => HomePage(),
+        "homePage": (context) => LoginPage(),
       },
     );
   }

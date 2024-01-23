@@ -1,22 +1,50 @@
-import 'package:flutter/material.dart';
-import 'package:ecommerce/components/button_facebook.dart';
-import 'package:ecommerce/components/button_google.dart';
-import 'package:ecommerce/components/my_button.dart';
-import 'package:ecommerce/components/my_textfield.dart';
 import 'package:ecommerce/pages/register.dart';
+import 'package:flutter/material.dart';
+import 'package:ecommerce/controller/AuthController.dart';
+import 'package:ecommerce/models/AuthResponseModel.dart';
 import 'package:ecommerce/views/home.dart';
 
-// ignore: must_be_immutable
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool rememberMe = false;
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  void signUserIn() {}
-  void signWithGoogle() {}
-  void signWithFacebook() {}
+  void signUserIn() async {
+    final UserModel user = UserModel(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    final AuthResponseModel? authResponse =
+        await AuthController.loginUser(user);
+
+    if (authResponse != null) {
+      print("Login berhasil: ${authResponse.token}");
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Login gagal. Periksa kembali email dan password."),
+        ),
+      );
+    }
+  }
+
+  void signWithGoogle() {
+    // Implement Google sign-in functionality
+  }
+
+  void signWithFacebook() {
+    // Implement Facebook sign-in functionality
+  }
 
   void navigateToRegisterPage(BuildContext context) {
     Navigator.push(
@@ -28,100 +56,68 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
+      appBar: AppBar(
+        title: Text("Login Page"),
+        backgroundColor: Colors.blue, // Set your desired app bar color
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 5,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // logo
                   Image.asset(
                     'lib/images/logo.png',
                     width: 100,
                     height: 100,
                   ),
-
-                  const SizedBox(height: 50),
-
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to HomePage when the text is tapped
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    child: Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        color: Colors.grey[900],
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
+                  const SizedBox(height: 10),
                   Text(
-                    'Welcome back you\'ve been missed!',
+                    'Welcome back, you\'ve been missed!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
                     ),
                   ),
-
-                  const SizedBox(height: 25),
-
-                  // username textfield
-                  MyTextField(
+                  const SizedBox(height: 20),
+                  TextField(
                     controller: emailController,
-                    hintText: 'Email',
-                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-
                   const SizedBox(height: 10),
-
-                  // password textfield
-                  MyTextField(
+                  TextField(
                     controller: passwordController,
-                    hintText: 'Password',
                     obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-
-                  const SizedBox(height: 10),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        value: rememberMe,
-                        onChanged: (newValue) {
-                          // setState(() {
-                          //   rememberMe = newValue ?? false;
-                          // });
-                        },
-                      ),
-                      Text(
-                        'Remember Me',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ],
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: signUserIn,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue, // Set your desired button color
+                    ),
+                    child: Text('Login'),
                   ),
-
-                  const SizedBox(height: 10, width: 50),
-
-                  // sign in button
-                  MyButton(
-                    onTap: signUserIn,
-                  ),
-
-                  const SizedBox(height: 50),
-
-                  // or continue with
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
@@ -148,22 +144,23 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 50),
-
-                  button_google(
-                    onTap: signWithGoogle,
-                  ),
-
                   const SizedBox(height: 20),
-
-                  button_facebook(
-                    onTap: signWithFacebook,
+                  ElevatedButton(
+                    onPressed: signWithGoogle,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red, // Set your desired button color
+                    ),
+                    child: Text('Sign in with Google'),
                   ),
-
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: signWithFacebook,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue, // Set your desired button color
+                    ),
+                    child: Text('Sign in with Facebook'),
+                  ),
                   const SizedBox(height: 20),
-
-                  // not a member? register now
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

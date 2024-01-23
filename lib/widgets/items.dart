@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Items extends StatefulWidget {
   @override
-  _Items createState() => _Items();
+  _Items createState() => _Items(); 
 }
 
 class _Items extends State<Items> {
@@ -53,32 +53,37 @@ class _Items extends State<Items> {
         FutureBuilder(
           future: products,
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
+            if (snapshot.hasData) {
               return GridView.count(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                childAspectRatio: 0.8,
-                shrinkWrap: true,
-                children: [
-                  for (int i=0; i<snapshot.data!.length; i++)
-                    ItemCard(
-                      product: Product(
-                        id: snapshot.data![i].id,
-                        name: snapshot.data![i].name,
-                        category: snapshot.data![i].category,
-                        price: snapshot.data![i].price,
-                        image: snapshot.data![i].image,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.8,
+                  shrinkWrap: true,
+                  children: [
+                    for (int i = 0; i < snapshot.data!.length; i++)
+                      ItemCard(
+                        product: Product(
+                          id: snapshot.data![i].id,
+                          name: snapshot.data![i].name,
+                          category: snapshot.data![i].category,
+                          price: snapshot.data![i].price,
+                          image: 'lib/images/${snapshot.data![i].name}.png',
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          child: Image.asset(
+                              'lib/images/${snapshot.data![i].name}.png'),
+                          height: 110,
+                          width: 110,
+                        ),
                       ),
-                    ),
-                ]
-              );
-            }
-            else if(snapshot.hasError) {
+                  ]);
+            } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
-            }
-            else {
+            } else {
               return const CircularProgressIndicator();
             }
           },
@@ -86,5 +91,4 @@ class _Items extends State<Items> {
       ],
     );
   }
-
 }
